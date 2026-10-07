@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: mkb-blood-donation
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt && python manage.py migrate --noinput && python manage.py collectstatic --noinput
+    startCommand: gunicorn blooddonation.wsgi:application
+    healthCheckPath: /
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.17"
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: ".onrender.com"
+      - key: SECRET_KEY
+        generateValue: true
+
+databases:
+  - name: blood-donation-db
+    plan: free
+    databaseName: blooddonation
