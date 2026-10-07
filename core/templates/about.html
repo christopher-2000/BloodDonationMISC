@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}About | MKB Blood Donation Forum{% endblock %}
+
+{% block content %}
+<section class="page-hero about-hero" style="--bg: url('{% static 'images/hero-about.jpg' %}')">
+  <div class="page-hero-inner">
+    <p class="eyebrow-line">ABOUT US</p>
+    <h1>MKB <span>Blood Donation Forum</span></h1>
+    <h3 class="sub">by misc YL Ernakulam</h3>
+    <p>MKB Blood Donation Forum is a youth-led initiative by the Malabar Independent Syrian Church (MISC) Youth League, Ernakulam, connecting voluntary blood donors and helping patients in need. We believe in the power of community, compassion and the spirit of service.</p>
+  </div>
+</section>
+
+<section class="about-card" style="--bg: url('{% static 'images/about-church.jpg' %}')">
+  <div class="about-card-text">
+    <p class="eyebrow-line">ABOUT</p>
+    <h2>MISC Youth League Ernakulam</h2>
+    <p>The MISC Youth League, Ernakulam, is a vibrant community of young individuals committed to faith, service and social responsibility. Through various initiatives, we strive to create a positive impact in society and support those in need.</p>
+    <p>Anyone aged 18 to 65 can register as a donor. Our team may contact you when a matching blood group is needed in your area.</p>
+    <a href="{% url 'register' %}" class="btn-red">Become a Donor <span>→</span></a>
+  </div>
+</section>
+
+<section class="bearers">
+  <p class="eyebrow-line">OUR OFFICE BEARERS</p>
+  <div class="bearer-grid">
+    {% for bearer in bearers %}
+    <div class="bearer">
+      {% if bearer.image_url %}
+      <img class="bearer-photo" src="{{ bearer.image_url }}" alt="{{ bearer.name }}">
+      {% else %}
+      <div class="avatar big"></div>
+      {% endif %}
+      <strong>{{ bearer.name }}</strong>
+      <span>{{ bearer.position }}</span>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

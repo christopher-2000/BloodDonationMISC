@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Registration Successful | MKB Blood Donation Forum{% endblock %}
+
+{% block content %}
+<section class="success-page">
+  <div class="form-card success-card">
+    <div class="round-icon">✔</div>
+    <h2>Thank you for registering!</h2>
+    <p>Your donor registration has been submitted successfully.</p>
+    <div class="success-actions">
+      <a href="{% url 'register' %}" class="btn-outline">Register another donor</a>
+      <a href="{% url 'search_donors' %}" class="btn-red">Browse donors</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

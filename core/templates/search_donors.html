@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Find Donors | MKB Blood Donation Forum{% endblock %}
+
+{% block content %}
+<section class="page-hero" style="--bg: url('{% static 'images/hero-search.jpg' %}')">
+  <div class="page-hero-inner">
+    <h1>Find <span>Blood Donors</span></h1>
+    <p>Search for registered blood donors in our network by blood group and location. Together we can save lives.</p>
+  </div>
+</section>
+
+<div class="search-wrap">
+  <form method="get" class="search-bar filters">
+    <div class="field">
+      <label for="blood_group">Blood Group</label>
+      <select name="blood_group" id="blood_group">
+        <option value="">All blood groups</option>
+        {% for value, label in blood_groups %}
+          <option value="{{ value }}" {% if value == blood_group %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label for="location">Location</label>
+      <input type="text" name="location" id="location" value="{{ location }}" placeholder="Enter area or city" data-location-autocomplete="short">
+    </div>
+    <button type="submit" class="btn-red">Search Donors</button>
+  </form>
+
+  <div id="results">
+  <div class="results-head">
+    <h2>Found <span>{{ donors|length }}</span> Donor{{ donors|length|pluralize }}</h2>
+  </div>
+
+  <div class="donor-list">
+    {% for donor in donors %}
+    <article class="donor-row">
+      <div class="avatar"></div>
+      <div class="donor-name">
+        <strong>{{ donor.name }}</strong>
+        <small>{{ donor.age }} yrs<br>{{ donor.house_or_shop_name }}</small>
+      </div>
+      <div class="group-badge">{{ donor.blood_group }}</div>
+      <div class="donor-meta"><span class="m-icon">📍</span>{{ donor.current_location }}</div>
+      <div class="donor-meta"><span class="m-icon">📅</span><span><small>Last Donated</small><br>{{ donor.last_donated|date:"d M Y"|default:"—" }}</span></div>
+      <button type="button" class="btn-red contact-btn" data-contact-phone="{{ donor.phone }}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>Contact</button>
+    </article>
+    {% empty %}
+    <p class="empty">No donors found matching your search.</p>
+    {% endfor %}
+  </div>
+  </div>
+</div>
+{% endblock %}
