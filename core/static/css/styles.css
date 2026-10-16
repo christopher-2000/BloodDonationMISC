@@ -53,8 +53,15 @@ a { color: inherit; text-decoration: none; }
 .footer-bottom {
   border-top: 1px solid rgba(255, 255, 255, .12);
   padding: 16px 32px;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
   font-size: 13px;
+}
+@media (max-width: 600px) {
+  .footer-bottom { justify-content: center; text-align: center; }
 }
 @media (max-width: 800px) {
   .footer-inner { grid-template-columns: 1fr; gap: 24px; }
@@ -1974,3 +1981,235 @@ select.invalid { border-color: var(--bright); box-shadow: 0 0 0 4px rgba(244, 0,
   text-transform: uppercase;
   color: var(--stone);
 }
+
+/* ---------- Initiative card: clickable + clamped text ---------- */
+.initiative-card { cursor: pointer; }
+.initiative-card:focus-visible { outline: 3px solid var(--bright); outline-offset: 2px; }
+.initiative-content p {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.initiative-button { cursor: pointer; }
+
+/* ---------- Initiative detail popup ---------- */
+body.modal-open { overflow: hidden; }
+.initiative-modal { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.initiative-modal[hidden] { display: none; }
+.initiative-modal-backdrop { position: absolute; inset: 0; background: rgba(15, 12, 16, .72); }
+.initiative-modal-panel {
+  position: relative;
+  width: 100%;
+  max-width: 860px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, .4);
+}
+.initiative-modal-close {
+  position: absolute;
+  top: 10px; right: 12px;
+  z-index: 3;
+  width: 38px; height: 38px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, .55);
+  color: #fff;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background .2s ease;
+}
+.initiative-modal-close:hover { background: var(--bright); }
+.initiative-modal-media {
+  position: relative;
+  background: #100d0f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 52vh;
+  max-height: 420px;
+  flex-shrink: 0;
+}
+.initiative-modal-img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.initiative-modal-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42px; height: 42px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .85);
+  color: #23141b;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background .2s ease;
+}
+.initiative-modal-nav:hover { background: #fff; }
+.initiative-modal-nav.prev { left: 12px; }
+.initiative-modal-nav.next { right: 12px; }
+.initiative-modal-count {
+  position: absolute;
+  bottom: 12px; left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, .6);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+}
+.initiative-modal-count[hidden] { display: none; }
+.initiative-modal-body { padding: 22px 26px 26px; overflow-y: auto; }
+.initiative-modal-body h3 { margin: 0 0 10px; font-family: var(--serif); font-size: 26px; color: var(--ink); }
+.initiative-modal-desc { margin: 0; white-space: pre-line; color: var(--stone); line-height: 1.65; }
+.initiative-modal-link { margin-top: 16px; }
+.initiative-modal-link[hidden] { display: none; }
+@media (max-width: 600px) {
+  .initiative-modal-media { height: 38vh; }
+  .initiative-modal-body { padding: 18px 18px 22px; }
+  .initiative-modal-body h3 { font-size: 21px; }
+}
+
+/* ---------- About card: photo in its own column (fits nicely, readable text) ---------- */
+.about-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  align-items: stretch;
+  padding: 0;
+  min-height: 500px;
+}
+.about-card-text {
+  flex: 1 1 54%;
+  max-width: none;
+  align-self: center;
+  padding: 44px 48px;
+}
+.about-media {
+  flex: 1 1 46%;
+  display: flex;
+  min-width: 0;
+  padding: 0;
+  background: #f2ece0;
+}
+.about-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 22%;
+  display: block;
+}
+@media (max-width: 800px) {
+  .about-card { flex-direction: column; min-height: 0; }
+  .about-card-text { padding: 32px 26px; }
+  .about-media { min-height: 320px; }
+  .about-media img { object-position: center 15%; }
+}
+
+/* ---------- Office bearers: bigger photo, no ring ---------- */
+.bearer-photo {
+  width: 150px;
+  height: 150px;
+  box-shadow: none;
+}
+@media (max-width: 600px) {
+  .bearer-photo { width: 120px; height: 120px; }
+}
+
+/* ---------- Office bearers: centre partial rows ---------- */
+.bearer-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+.bearer {
+  flex: 0 1 calc(25% - 15px);
+  min-width: 200px;
+}
+@media (max-width: 1000px) {
+  .bearer { flex: 0 1 calc(50% - 10px); }
+}
+
+/* ---------- Office bearers: phone ---------- */
+.bearer-phone {
+  margin-top: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 999px;
+  background: #ffe9ea;
+  color: var(--red);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.bearer-phone svg { width: 14px; height: 14px; fill: currentColor; flex-shrink: 0; }
+.bearer-phone:hover { background: #ffd6d9; }
+
+
+/* ---------- Initiative carousel: swipeable on touch ---------- */
+.initiative-track {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 4px;
+}
+.initiative-track::-webkit-scrollbar { display: none; height: 0; }
+.initiative-card { scroll-snap-align: start; }
+
+
+/* ---------- Registration restricted notice ---------- */
+.register-restricted {
+  background: #fff7f7;
+  border: 1px solid #ffd6d9;
+  border-radius: 14px;
+  padding: 22px 22px 6px;
+}
+.register-restricted h3 {
+  margin: 0 0 10px;
+  font-size: 20px;
+  color: var(--ink);
+}
+.register-restricted p {
+  margin: 0 0 14px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.register-restricted a {
+  color: var(--red);
+  font-weight: 600;
+}
+
+
+/* ---------- Admin login link (sits in the footer's bottom row) ---------- */
+.admin-corner {
+  font-size: 12px;
+  letter-spacing: 0.4px;
+  color: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  padding: 5px 13px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.admin-corner:hover {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+
+
+

@@ -11,7 +11,7 @@
 <section class="register-page">
   <div class="register-left">
     <h1>Register as a<br><span>Blood Donor</span></h1>
-    <p>Join MKB Blood Donation Forum by misc YL Ernakulam and be a part of a life-saving community.</p>
+    <p>Join MKB Blood Donation Forum by MISCYL Ernakulam and be a part of a life-saving community.</p>
     <ul class="benefits">
       <li><span class="b-icon">👥</span>Help Patients<br>in Need</li>
       <li><span class="b-icon">♥</span>Build a Stronger<br>Community</li>
@@ -24,10 +24,20 @@
       <div class="round-icon">＋</div>
       <div>
         <h2>Donor Registration</h2>
-        <p>Fill in your details to join our blood donor network.</p>
+        <p>{% if restricted %}Registrations are added by our admins and coordinators.{% else %}Fill in your details to join our blood donor network.{% endif %}</p>
       </div>
     </div>
 
+    {% if restricted %}
+    <div class="register-restricted">
+      <h3>Registration is handled by our team</h3>
+      <p>To keep the donor list authentic, registrations are added by our admins
+        and coordinators only. Please contact any of our admins or coordinators
+        and they will add you to the network.</p>
+      <p>You can reach them through the numbers listed on the
+        <a href="{% url 'about' %}">About Us</a> page.</p>
+    </div>
+    {% else %}
     <form method="post" class="donor-form">
       {% csrf_token %}
       {{ form.non_field_errors }}
@@ -44,6 +54,7 @@
       {% include "_field.html" with field=form.current_location label="Current Location" required=True %}
       <button type="submit" class="btn-red wide-btn">Register as Donor <span>→</span></button>
     </form>
+    {% endif %}
   </div>
 </section>
 {% endblock %}

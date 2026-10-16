@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}MKB Blood Donation Forum{% endblock %}</title>
   {% load static %}
+  {% load site_content %}
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&display=swap" rel="stylesheet">
@@ -22,7 +23,7 @@
         </svg>
         <span class="brand-text">
           <strong>MKB <em>Blood Donation Forum</em></strong>
-          <small>by misc YL Ernakulam</small>
+          <small>{% site_text "site_small_tagline" "by MISCYL Ernakulam" %}</small>
         </span>
       </a>
       <button class="nav-toggle" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="main-nav">
@@ -56,10 +57,10 @@
           </svg>
           <span class="brand-text">
             <strong>MKB <em>Blood Donation Forum</em></strong>
-            <small>by misc YL Ernakulam</small>
+            <small>{% site_text "site_small_tagline" "by MISCYL Ernakulam" %}</small>
           </span>
         </a>
-        <p>A community-driven initiative connecting blood donors with those in need.</p>
+        <p>{% site_text "footer_tagline" "A community-driven initiative connecting blood donors with those in need." %}</p>
       </div>
       <div class="footer-links">
         <h4>Quick Links</h4>
@@ -70,7 +71,8 @@
       </div>
     </div>
     <div class="footer-bottom">
-      &copy; {% now "Y" %} MKB Blood Donation Forum by MISC Youth League Ernakulam. All rights reserved.
+      <span>&copy; {% now "Y" %} {% site_text "footer_copyright" "MKB Blood Donation Forum by MISC Youth League Ernakulam. All rights reserved." %}</span>
+      <a href="{% url 'admin:login' %}" class="admin-corner" title="Staff / admin sign in">admin login</a>
     </div>
   </footer>
 

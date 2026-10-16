@@ -1,30 +1,33 @@
 {% extends "base.html" %}
 {% load static %}
+{% load site_content %}
 
 {% block title %}About | MKB Blood Donation Forum{% endblock %}
 
 {% block content %}
 <section class="page-hero about-hero" style="--bg: url('{% static 'images/hero-about.jpg' %}')">
   <div class="page-hero-inner">
-    <p class="eyebrow-line">ABOUT US</p>
-    <h1>MKB <span>Blood Donation Forum</span></h1>
-    <h3 class="sub">by misc YL Ernakulam</h3>
-    <p>MKB Blood Donation Forum is a youth-led initiative by the Malabar Independent Syrian Church (MISC) Youth League, Ernakulam, connecting voluntary blood donors and helping patients in need. We believe in the power of community, compassion and the spirit of service.</p>
+    <p class="eyebrow-line">{% site_text "about_hero_eyebrow" "ABOUT US" %}</p>
+    <h1>{% site_html "about_hero_title" "MKB <span>Blood Donation Forum</span>" %}</h1>
+    <h3 class="sub">{% site_text "about_hero_sub" "by MISCYL Ernakulam" %}</h3>
+    <p>{% site_text "about_hero_text" "MKB Blood Donation Forum is a youth-led initiative by the Malabar Independent Syrian Church (MISC) Youth League, Ernakulam, connecting voluntary blood donors and helping patients in need. We believe in the power of community, compassion and the spirit of service." %}</p>
   </div>
 </section>
 
-<section class="about-card" style="--bg: url('{% static 'images/about-church.jpg' %}')">
+<section class="about-card">
   <div class="about-card-text">
-    <p class="eyebrow-line">ABOUT</p>
-    <h2>MISC Youth League Ernakulam</h2>
-    <p>The MISC Youth League, Ernakulam, is a vibrant community of young individuals committed to faith, service and social responsibility. Through various initiatives, we strive to create a positive impact in society and support those in need.</p>
-    <p>Anyone aged 18 to 65 can register as a donor. Our team may contact you when a matching blood group is needed in your area.</p>
-    <a href="{% url 'register' %}" class="btn-red">Become a Donor <span>→</span></a>
+    <p class="eyebrow-line">{% site_text "about_intro_eyebrow" "ABOUT" %}</p>
+    <h2>{% site_text "about_intro_title" "MISC Youth League Ernakulam" %}</h2>
+    {% site_paragraphs "about_intro_text" "MISC Youth League Ernakulam is the youth wing of the Malabar Independent Syrian Church (MISC)." %}
+    <a href="{% url 'register' %}" class="btn-red">{% site_text "about_cta_button" "Become a Donor" %} <span>→</span></a>
+  </div>
+  <div class="about-media">
+    <img src="{% static 'images/church.png' %}" alt="Malabar Independent Syrian Church">
   </div>
 </section>
 
 <section class="bearers">
-  <p class="eyebrow-line">OUR OFFICE BEARERS</p>
+  <p class="eyebrow-line">{% site_text "about_bearers_title" "OUR OFFICE BEARERS" %}</p>
   <div class="bearer-grid">
     {% for bearer in bearers %}
     <div class="bearer">
@@ -35,6 +38,12 @@
       {% endif %}
       <strong>{{ bearer.name }}</strong>
       <span>{{ bearer.position }}</span>
+      {% if bearer.phone %}
+      <button type="button" class="bearer-phone" data-contact-phone="{{ bearer.phone }}">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>
+        {{ bearer.phone }}
+      </button>
+      {% endif %}
     </div>
     {% endfor %}
   </div>

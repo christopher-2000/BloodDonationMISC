@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load site_content %}
 
 {% block title %}Home | MKB Blood Donation Forum{% endblock %}
 
@@ -17,23 +18,15 @@
         <div class="hero-left">
 
             <p class="hero-eyebrow">
-                GIVE BLOOD
-                <span>•</span>
-                GIVE HOPE
-                <span>•</span>
-                SAVE LIVES
+                {% site_html "home_hero_eyebrow" "GIVE BLOOD <span>•</span> GIVE HOPE <span>•</span> SAVE LIVES" %}
             </p>
 
             <h1>
-                A Community<br>
-                That <span>Gives Life</span>
+                {% site_html "home_hero_title" "A Community<br>That <span>Gives Life</span>" %}
             </h1>
 
             <p class="hero-description">
-                MKB Blood Donation Forum by misc YL Ernakulam is a
-                community-driven initiative to connect blood donors,
-                support those in need, and promote a healthier,
-                stronger society.
+                {% site_text "home_hero_description" "MKB Blood Donation Forum by MISCYL Ernakulam is a community-driven initiative to connect blood donors, support those in need, and promote a healthier, stronger society." %}
             </p>
 
             <!-- ACTION CARDS -->
@@ -47,16 +40,15 @@
                     </div>
 
                     <div class="hero-action-content">
-                        <h3>Search Donor</h3>
+                        <h3>{% site_text "home_search_title" "Search Donor" %}</h3>
 
                         <p>
-                            Find blood donors by blood group,
-                            location and more.
+                            {% site_text "home_search_text" "Find blood donors by blood group, location and more." %}
                         </p>
 
                         <a href="{% url 'search_donors' %}"
                            class="hero-button">
-                            Search Donor
+                            {% site_text "home_search_button" "Search Donor" %}
                             <span>→</span>
                         </a>
                     </div>
@@ -72,16 +64,15 @@
                     </div>
 
                     <div class="hero-action-content">
-                        <h3>Register as Donor</h3>
+                        <h3>{% site_text "home_register_title" "Register as Donor" %}</h3>
 
                         <p>
-                            Join our donor network and
-                            help save lives.
+                            {% site_text "home_register_text" "Join our donor network and help save lives." %}
                         </p>
 
                         <a href="{% url 'register' %}"
                            class="hero-button">
-                            Register Now
+                            {% site_text "home_register_button" "Register Now" %}
                             <span>→</span>
                         </a>
                     </div>
@@ -102,7 +93,7 @@
 ========================= -->
 <section class="stats-strip">
     <div class="stats-card reveal">
-        <p class="stats-heading">Community at a Glance</p>
+        <p class="stats-heading">{% site_text "home_stats_heading" "Community at a Glance" %}</p>
         <div class="stat">
             <strong>{{ stats.donors }}</strong>
             <span>Registered Donors</span>
@@ -125,25 +116,25 @@
 <section class="steps-section">
     <div class="container">
         <div class="section-title center reveal">
-            <h2>How It Works</h2>
+            <h2>{% site_text "home_steps_title" "How It Works" %}</h2>
             <div class="title-line"></div>
-            <p class="section-sub">Three simple steps to give — or find — the gift of life.</p>
+            <p class="section-sub">{% site_text "home_steps_subtitle" "Three simple steps to give — or find — the gift of life." %}</p>
         </div>
         <div class="steps-grid">
             <div class="step-card reveal">
                 <span class="step-num">1</span>
-                <h3>Register</h3>
-                <p>Share your blood group, location and contact number. It takes less than a minute.</p>
+                <h3>{% site_text "home_step1_title" "Register" %}</h3>
+                <p>{% site_text "home_step1_text" "Share your blood group, location and contact number. It takes less than a minute." %}</p>
             </div>
             <div class="step-card reveal">
                 <span class="step-num">2</span>
-                <h3>Get Connected</h3>
-                <p>When someone nearby needs your blood group, they can find and reach you directly.</p>
+                <h3>{% site_text "home_step2_title" "Get Connected" %}</h3>
+                <p>{% site_text "home_step2_text" "When someone nearby needs your blood group, they can find and reach you directly." %}</p>
             </div>
             <div class="step-card reveal">
                 <span class="step-num">3</span>
-                <h3>Save a Life</h3>
-                <p>One donation can help up to three people. Your gift becomes someone's tomorrow.</p>
+                <h3>{% site_text "home_step3_title" "Save a Life" %}</h3>
+                <p>{% site_text "home_step3_text" "One donation can help up to three people. Your gift becomes someone's tomorrow." %}</p>
             </div>
         </div>
     </div>
@@ -158,7 +149,7 @@
     <div class="container">
 
         <div class="section-title center">
-            <h2>Other Youth-Led Initiatives</h2>
+            <h2>{% site_text "home_initiatives_title" "Other Youth-Led Initiatives" %}</h2>
             <div class="title-line"></div>
         </div>
 
@@ -175,11 +166,13 @@
             <div class="initiative-track">
 
                 {% for initiative in initiatives %}
-                <article class="initiative-card">
+                <article class="initiative-card" data-initiative="{{ forloop.counter0 }}" tabindex="0" role="button" aria-label="View {{ initiative.title }}">
 
+                    {% if initiative.cover %}
                     <img
-                        src="{{ initiative.image_url }}"
+                        src="{{ initiative.cover }}"
                         alt="{{ initiative.title }}">
+                    {% endif %}
 
                     <div class="initiative-content">
 
@@ -189,11 +182,10 @@
                             {{ initiative.description }}
                         </p>
 
-                        <a href="{{ initiative.link|default:'#' }}"
-                           class="initiative-button">
-                            Learn More
+                        <span class="initiative-button">
+                            View More
                             <span>→</span>
-                        </a>
+                        </span>
 
                     </div>
 
@@ -223,6 +215,35 @@
 
 
 <!-- =========================
+     INITIATIVE DETAIL POPUP
+========================= -->
+{{ initiatives_json|json_script:"initiatives-data" }}
+
+<div class="initiative-modal" id="initiative-modal" hidden>
+    <div class="initiative-modal-backdrop" data-close></div>
+
+    <div class="initiative-modal-panel" role="dialog" aria-modal="true" aria-labelledby="initiative-modal-title">
+
+        <button type="button" class="initiative-modal-close" data-close aria-label="Close">×</button>
+
+        <div class="initiative-modal-media">
+            <button type="button" class="initiative-modal-nav prev" aria-label="Previous image">‹</button>
+            <img class="initiative-modal-img" src="" alt="">
+            <button type="button" class="initiative-modal-nav next" aria-label="Next image">›</button>
+            <span class="initiative-modal-count"></span>
+        </div>
+
+        <div class="initiative-modal-body">
+            <h3 id="initiative-modal-title"></h3>
+            <p class="initiative-modal-desc"></p>
+            <a class="btn-red initiative-modal-link" href="#" target="_blank" rel="noopener" hidden>Learn More</a>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- =========================
      MISSION & VISION
 ========================= -->
 <section class="mission-section">
@@ -238,31 +259,11 @@
 
             <div class="mission-content">
 
-                <h3>Our Mission</h3>
+                <h3>{% site_text "home_mission_title" "Our Mission" %}</h3>
 
                 <div class="red-line"></div>
 
-                <p>
-                    To build a dedicated blood donor network within the
-                    Mar Koorilose Bava Church community, bringing together
-                    our members and families who are willing to donate blood
-                    and support fellow community members during medical
-                    emergencies.
-                </p>
-
-                <p>
-                    Our mission is to connect community donors with patients
-                    from our community who require blood, particularly those
-                    travelling from Kunnamkulam to Ernakulam for specialised
-                    medical treatment.
-                </p>
-
-                <p>
-                    Through the Youth League, we aim to create a trusted and
-                    responsive support system where our community stands
-                    together in times of medical need, ensuring that no
-                    member of our community faces a blood shortage alone.
-                </p>
+                {% site_paragraphs "home_mission_text" "To build a dedicated blood donor network within the Mar Koorilose Bava Church community, bringing together our members and families who are willing to donate blood and support fellow community members during medical emergencies." %}
 
             </div>
 
@@ -282,30 +283,11 @@
 
             <div class="mission-content">
 
-                <h3>Our Vision</h3>
+                <h3>{% site_text "home_vision_title" "Our Vision" %}</h3>
 
                 <div class="red-line"></div>
 
-                <p>
-                    To create a strong, united, and dependable blood donor
-                    community within Mar Koorilose Bava Church, where every
-                    eligible donor is ready to support a fellow community
-                    member in need.
-                </p>
-
-                <p>
-                    We envision a community where the bond between our
-                    members extends beyond generations and geographical
-                    boundaries—from Kunnamkulam to Ernakulam—and where
-                    voluntary blood donation becomes a lasting expression of
-                    our faith, compassion, and responsibility towards one
-                    another.
-                </p>
-
-                <p>
-                    Our vision is to make our community a reliable lifeline
-                    for our own people, whenever and wherever they need us.
-                </p>
+                {% site_paragraphs "home_vision_text" "To create a strong, united, and dependable blood donor community within Mar Koorilose Bava Church, where every eligible donor is ready to support a fellow community member in need." %}
 
             </div>
 
@@ -322,9 +304,9 @@
 <section class="verse-band" style="--bg: url('{% static 'images/community.jpg' %}')">
     <div class="verse-inner reveal">
         <span class="verse-mark">“</span>
-        <blockquote>Freely you have received; freely give.</blockquote>
-        <cite>Matthew 10:8</cite>
-        <p>Serving our community is how we live out our faith. Join the youth of MISC in giving hope to those who need it most.</p>
+        <blockquote>{% site_text "home_verse_quote" "Freely you have received; freely give." %}</blockquote>
+        <cite>{% site_text "home_verse_cite" "Matthew 10:8" %}</cite>
+        <p>{% site_text "home_verse_note" "Serving our community is how we live out our faith. Join the youth of MISC in giving hope to those who need it most." %}</p>
     </div>
 </section>
 
@@ -334,11 +316,11 @@
 ========================= -->
 <section class="cta-band">
     <div class="cta-inner reveal">
-        <h2>Ready to be someone's miracle?</h2>
-        <p>Join our growing family of donors, or find a donor when every minute counts.</p>
+        <h2>{% site_text "home_cta_title" "Ready to be someone's miracle?" %}</h2>
+        <p>{% site_text "home_cta_text" "Join our growing family of donors, or find a donor when every minute counts." %}</p>
         <div class="cta-buttons">
-            <a href="{% url 'register' %}" class="cta-primary">Become a Donor</a>
-            <a href="{% url 'search_donors' %}" class="cta-secondary">Find a Donor</a>
+            <a href="{% url 'register' %}" class="cta-primary">{% site_text "home_cta_primary" "Become a Donor" %}</a>
+            <a href="{% url 'search_donors' %}" class="cta-secondary">{% site_text "home_cta_secondary" "Find a Donor" %}</a>
         </div>
     </div>
 </section>
@@ -359,6 +341,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const cards = track.querySelectorAll(".initiative-card");
 
     let currentIndex = 0;
+    let programmatic = false;
 
     // Distance the track moves per step: one card plus the gap between cards.
     function stepWidth() {
@@ -398,11 +381,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function update() {
         currentIndex = Math.min(currentIndex, maxIndex());
+        programmatic = true;
         track.scrollTo({ left: currentIndex * stepWidth(), behavior: "smooth" });
         dotsBox.querySelectorAll("span").forEach(function (dot, i) {
             dot.classList.toggle("active", i === currentIndex);
         });
+        // Let the smooth scroll finish before tracking user swipes again.
+        clearTimeout(update.timer);
+        update.timer = setTimeout(function () { programmatic = false; }, 500);
     }
+
+    // Keep dots/arrows in sync when the user swipes the track.
+    track.addEventListener("scroll", function () {
+        if (programmatic) return;
+        const step = stepWidth();
+        if (!step) return;
+        currentIndex = Math.min(maxIndex(), Math.max(0, Math.round(track.scrollLeft / step)));
+        dotsBox.querySelectorAll("span").forEach(function (dot, i) {
+            dot.classList.toggle("active", i === currentIndex);
+        });
+    });
 
     next?.addEventListener("click", function () {
         if (currentIndex < maxIndex()) {
@@ -426,6 +424,106 @@ document.addEventListener("DOMContentLoaded", function () {
 
     buildDots();
     update();
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const modal = document.getElementById("initiative-modal");
+    const dataEl = document.getElementById("initiatives-data");
+    if (!modal || !dataEl) return;
+
+    const data = JSON.parse(dataEl.textContent);
+    const img = modal.querySelector(".initiative-modal-img");
+    const count = modal.querySelector(".initiative-modal-count");
+    const title = modal.querySelector("#initiative-modal-title");
+    const desc = modal.querySelector(".initiative-modal-desc");
+    const link = modal.querySelector(".initiative-modal-link");
+    const prevBtn = modal.querySelector(".initiative-modal-nav.prev");
+    const nextBtn = modal.querySelector(".initiative-modal-nav.next");
+    const cards = document.querySelectorAll(".initiative-card");
+
+    let images = [];
+    let index = 0;
+    let lastFocus = null;
+
+    function renderImage() {
+        img.src = images[index];
+        img.alt = title.textContent;
+        count.textContent = (index + 1) + " / " + images.length;
+        const many = images.length > 1;
+        count.hidden = !many;
+        prevBtn.hidden = !many;
+        nextBtn.hidden = !many;
+    }
+
+    function step(delta) {
+        if (images.length < 2) return;
+        index = (index + delta + images.length) % images.length;
+        renderImage();
+    }
+
+    function openModal(cardIndex) {
+        const item = data[cardIndex];
+        if (!item) return;
+        images = item.images || [];
+        index = 0;
+        title.textContent = item.title;
+        desc.textContent = item.description;
+        if (item.link) {
+            link.href = item.link;
+            link.hidden = false;
+        } else {
+            link.hidden = true;
+        }
+        renderImage();
+        lastFocus = document.activeElement;
+        modal.hidden = false;
+        document.body.classList.add("modal-open");
+        modal.querySelector(".initiative-modal-close").focus();
+    }
+
+    function closeModal() {
+        modal.hidden = true;
+        document.body.classList.remove("modal-open");
+        if (lastFocus) lastFocus.focus();
+    }
+
+    cards.forEach(function (card) {
+        const open = function () { openModal(Number(card.dataset.initiative)); };
+        card.addEventListener("click", open);
+        card.addEventListener("keydown", function (e) {
+            if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                open();
+            }
+        });
+    });
+
+    modal.querySelectorAll("[data-close]").forEach(function (el) {
+        el.addEventListener("click", closeModal);
+    });
+    prevBtn.addEventListener("click", function () { step(-1); });
+    nextBtn.addEventListener("click", function () { step(1); });
+
+    document.addEventListener("keydown", function (e) {
+        if (modal.hidden) return;
+        if (e.key === "Escape") closeModal();
+        else if (e.key === "ArrowLeft") step(-1);
+        else if (e.key === "ArrowRight") step(1);
+    });
+
+    // Swipe between images on touch devices.
+    let startX = null;
+    modal.addEventListener("touchstart", function (e) {
+        startX = e.touches[0].clientX;
+    }, { passive: true });
+    modal.addEventListener("touchend", function (e) {
+        if (startX === null) return;
+        const dx = e.changedTouches[0].clientX - startX;
+        if (Math.abs(dx) > 40) step(dx < 0 ? 1 : -1);
+        startX = null;
+    });
 });
 </script>
 

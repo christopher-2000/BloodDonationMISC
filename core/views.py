@@ -1,19 +1,35 @@
 from django.shortcuts import redirect, render
 
 from .forms import DonorForm
-from .models import Donor, Initiative, OfficeBearer
+from .models import Donor, Initiative, OfficeBearer, image_url
 
 
 def home(request):
-    initiatives = Initiative.objects.all()
-    donors = Donor.objects.all()
+    initiatives = Initiative.objects.prefetch_related("images").all()
+    donors = Donor.objects.filter(is_approved=True)
     stats = {
         "donors": donors.count(),
         "groups": donors.values("blood_group").distinct().count(),
         "locations": donors.values("current_location").distinct().count(),
     }
+    # Data for the initiative detail popup (enlarged carousel + description).
+    initiatives_json = [
+        {
+            "title": item.title,
+            "description": item.description,
+            "link": item.link,
+            "images": [image_url(img.image) for img in item.images.all()],
+        }
+        for item in initiatives
+    ]
     return render(
-        request, "home.html", {"initiatives": initiatives, "stats": stats}
+        request,
+        "home.html",
+        {
+            "initiatives": initiatives,
+            "initiatives_json": initiatives_json,
+            "stats": stats,
+        },
     )
 
 
@@ -23,6 +39,11 @@ def about(request):
 
 
 def register_donor(request):
+    # Only signed-in admins may register donors; visitors are told to contact
+    # an admin/coordinator instead of being bounced to the login page.
+    if not (request.user.is_active and request.user.is_staff):
+        return render(request, "register.html", {"restricted": True})
+
     if request.method == "POST":
         form = DonorForm(request.POST)
         if form.is_valid():
@@ -38,7 +59,7 @@ def register_success(request):
 
 
 def search_donors(request):
-    donors = Donor.objects.all()
+    donors = Donor.objects.filter(is_approved=True)
     blood_group = request.GET.get("blood_group", "")
     location = request.GET.get("location", "").strip()
 
