@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Login | MKB Blood Donation Forum{% endblock %}
+
+{% block content %}
+<section class="success-page">
+  <div class="form-card login-card">
+    <div class="form-card-head">
+      <div class="round-icon">🔑</div>
+      <div>
+        <h2>Admin Login</h2>
+        <p>Sign in to add and manage donor registrations.</p>
+      </div>
+    </div>
+
+    <form method="post">
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+        <ul class="errorlist">{{ form.non_field_errors }}</ul>
+      {% endif %}
+      {% include "_field.html" with field=form.username label="Username" required=True %}
+      {% include "_field.html" with field=form.password label="Password" required=True %}
+      <button type="submit" class="btn-red wide-btn">Log In <span>→</span></button>
+    </form>
+  </div>
+</section>
+{% endblock %}

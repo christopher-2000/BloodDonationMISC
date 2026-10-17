@@ -2209,6 +2209,22 @@ body.modal-open { overflow: hidden; }
   color: #fff;
   border-color: rgba(255, 255, 255, 0.45);
 }
+button.admin-corner {
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+.footer-bottom form {
+  display: inline;
+  margin: 0;
+}
+
+
+/* ---------- Site admin login page ---------- */
+.login-card {
+  max-width: 520px;
+  margin: 0 auto;
+}
 
 
 

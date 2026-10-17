@@ -1,3 +1,5 @@
+from django.contrib.auth import login, logout
+from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import redirect, render
 
 from .forms import DonorForm
@@ -39,9 +41,9 @@ def about(request):
 
 
 def register_donor(request):
-    # Only signed-in admins may register donors; visitors are told to contact
+    # Only signed-in site admins may register donors; visitors are told to contact
     # an admin/coordinator instead of being bounced to the login page.
-    if not (request.user.is_active and request.user.is_staff):
+    if not (request.user.is_active and request.user.is_authenticated):
         return render(request, "register.html", {"restricted": True})
 
     if request.method == "POST":
@@ -56,6 +58,29 @@ def register_donor(request):
 
 def register_success(request):
     return render(request, "success.html")
+
+
+def admin_login(request):
+    if request.user.is_authenticated:
+        return redirect("register")
+
+    if request.method == "POST":
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            if user.is_active:
+                login(request, user)
+                return redirect("register")
+    else:
+        form = AuthenticationForm()
+
+    return render(request, "login.html", {"form": form})
+
+
+def admin_logout(request):
+    if request.method == "POST":
+        logout(request)
+    return redirect("home")
 
 
 def search_donors(request):
